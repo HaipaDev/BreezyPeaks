@@ -171,8 +171,6 @@ MonoBehaviour:
   healthStart: 1
   health: 1
   collisionThreshold: 25
-  collisionRayLength: 3.1
-  rayOffset: 0
   velocityMagnitude: 4
   minMaxDistance: {x: 1.4, y: 7}
   velocityLimitType: 2
@@ -180,5 +178,5 @@ MonoBehaviour:
   fly: 0
   offsetCamera: 1
   offsetCameraAmnt: 0.4
-  virtualCamera: {fileID: 0}
-  damageCollider: {fileID: 0}
+  velocityAddTime: 0.8
+  velocityAddTimer: 0
