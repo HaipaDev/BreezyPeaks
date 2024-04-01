@@ -38,21 +38,23 @@ public class GSceneManager : MonoBehaviour{ public static GSceneManager INSTANCE
         SaveSerial.INSTANCE.Save();
         AudioManager.INSTANCE.ClearPausedSounds();
         GameManager.INSTANCE.ResetMusicPitch();
-        yield return new WaitForSecondsRealtime(0.01f);
-        Resources.UnloadUnusedAssets();
+        // yield return new WaitForSecondsRealtime(0.01f);
+        // Resources.UnloadUnusedAssets();
         /*GameManager.INSTANCE.SetGamemodeSelected(0);*/
     }
-    public void RestartGame(){GSceneManager.INSTANCE.StartCoroutine(GSceneManager.INSTANCE.RestartGameI());}
-    IEnumerator RestartGameI(){
+    public void RestartGame(){//GSceneManager.INSTANCE.StartCoroutine(GSceneManager.INSTANCE.RestartGameI());}
+    // IEnumerator RestartGameI(){
         GameManager.INSTANCE.SaveHighscore();
         //if(GameManager.INSTANCE.CheckGamemodeSelected("Adventure"))GameManager.INSTANCE.SaveAdventure();//not sure if Restart should save or not
-        yield return new WaitForSecondsRealtime(0.01f);
+        // yield return new WaitForSecondsRealtime(0.01f);
         //spawnReqsMono.RestartAllValues();
         //spawnReqsMono.ResetSpawnReqsList();
         GameManager.INSTANCE.ResetScore();
         GameManager.INSTANCE.ResetMusicPitch();
-        yield return new WaitForSecondsRealtime(0.05f);
+        // yield return new WaitForSecondsRealtime(0.05f);
         AudioManager.INSTANCE.ClearPausedSounds();
+        // ReloadScene();
+        LoadGameScene();
     }
     public void LoadGameScene(){
         SceneManager.LoadScene("Game");GameManager.INSTANCE.ResetScore();
@@ -64,12 +66,12 @@ public class GSceneManager : MonoBehaviour{ public static GSceneManager INSTANCE
     public void LoadCreditsScene(){SceneManager.LoadScene("Credits");}
     public void LoadWebsite(string url){Application.OpenURL(url);}
     // public void SubmitScore(){if(SaveSerial.INSTANCE.hyperGamerLoginData.loggedIn){LoadScoreSubmitScene();}else{LoadLoginScene();}}
-    // public void ReloadScene(){
-    //     string _scene=SceneManager.GetActiveScene().name;
-    //     SceneManager.LoadScene(_scene);
-    //     GameManager.INSTANCE.speedChanged=false;
-    //     GameManager.INSTANCE.gameSpeed=1f;
-    // }
+    public void ReloadScene(){
+        string _scene=SceneManager.GetActiveScene().name;
+        SceneManager.LoadScene(_scene);
+        // GameManager.INSTANCE.speedChanged=false;
+        // GameManager.INSTANCE.gameSpeed=1f;
+    }
     // public void ReloadSceneUnload(){
     //     string _scene=SceneManager.GetActiveScene().name;
     //     SceneManager.UnloadSceneAsync(_scene);

@@ -119,4 +119,13 @@ MonoBehaviour:
     loop: 0
     mixerGroup: {fileID: 0}
     source: {fileID: 0}
+  - name: tomAndJerryGoofyAhhScream
+    clip: {fileID: 8300000, guid: 1501925ed3388c84dae42bd17c0ae3c5, type: 3}
+    volume: 1
+    volumeVariance: 0
+    pitch: 1
+    pitchVariance: 0.1
+    loop: 0
+    mixerGroup: {fileID: 0}
+    source: {fileID: 0}
   _preBossMusicVolume: 0

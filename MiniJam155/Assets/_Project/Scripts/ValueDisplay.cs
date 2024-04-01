@@ -28,6 +28,15 @@ public class ValueDisplay : MonoBehaviour{
             if(value=="score") _txt=("Score: "+gs.score.ToString());
         }
     #endregion
+    #region//SaveSerial
+        if(SaveSerial.INSTANCE!=null){     var s=SaveSerial.INSTANCE;
+        var pd=s.playerData;
+            if(value=="highscore"){
+                if(pd.highscore.score>0){_txt=("Highscore: "+pd.highscore.score.ToString());}
+                else{_txt="";}
+            }
+        }
+    #endregion
         
         if(txt!=null)txt.text=_txt;
         // else{if(tmpInput!=null){if(UIInputSystem.INSTANCE!=null)if(UIInputSystem.INSTANCE.currentSelected!=tmpInput.gameObject){tmpInput.text=_txt;}

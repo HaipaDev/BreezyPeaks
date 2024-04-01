@@ -8,8 +8,8 @@ public class FollowPlayer : MonoBehaviour{
     void Update(){
         float xx = transform.position.x;
         float yy = transform.position.y;
-        if(followX){xx=Player.INSTANCE.transform.position.x;}
-        if(followY){yy=Player.INSTANCE.transform.position.y;}
+        if(followX){xx=Player.INSTANCE.GetPosition().x;}
+        if(followY){yy=Player.INSTANCE.GetPosition().y;}
         transform.position = new Vector2(xx, yy);
     }
 }

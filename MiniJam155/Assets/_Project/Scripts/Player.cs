@@ -7,18 +7,17 @@ using UnityEngine.U2D;
 
 public class Player : MonoBehaviour{
     public static Player INSTANCE;
+    [SerializeField] Rigidbody2D rbObject;
     [SerializeField] LayerMask playerLayer;
     [SerializeField] LayerMask worldLayer;
-    [SerializeField] int healthMax = 1;
-    [SerializeField] int healthStart = 1;
-    [DisableInEditorMode][SerializeField] public int health = 1;
-    [SerializeField] float collisionThreshold = 25f;
-    [SerializeField] float velocityMagnitude = 11f;
+    [SerializeField] public float collisionThreshold = 25f;
+    [SerializeField] public float velocityMagnitude = 11f;
     [SerializeField] Vector2 minMaxDistance = new Vector2(1f,3f);
     [SerializeField] VelocityLimitType velocityLimitType = VelocityLimitType.distTimesMagnitude;
     [ShowIf("@this.velocityLimitType==VelocityLimitType.constant")][SerializeField] float maxVelocity = 5f;
     [SerializeField] bool fly = false;
     [SerializeField] bool flyUpwards = false;
+    [SerializeField] bool doTapPush = true;
     [SerializeField] bool offsetCamera = true;
     [SerializeField] float offsetCameraAmnt = 3f;
     [SerializeField] bool zoomoutCamera = true;
@@ -26,22 +25,26 @@ public class Player : MonoBehaviour{
     [SerializeField] float zoomoutCameraBase = 7f;
     [SerializeField] float velocityAddTime;
     [DisableInEditorMode][SerializeField] float velocityAddTimer;
+    [DisableInEditorMode][SerializeField] public bool dead;
+    [SerializeField] float collisionSoundCooldown = 0.1f;
+    [DisableInEditorMode][SerializeField] float collisionSoundCooldownTimer;
     CinemachineVirtualCamera  virtualCamera;
     Rigidbody2D rb;
     Vector2 mousePosition;
     Vector2 targetVelocity;
+    [HideInEditorMode][SerializeField]List<GameObject> hitBodypartsList;
+    [HideInEditorMode][SerializeField]bool easterEggTriggered = false;
+    [HideInEditorMode][SerializeField]float easterEggTimer;
     void Awake(){INSTANCE=this;}
     void Start(){
-        rb = GetComponent<Rigidbody2D>();
+        rb = rbObject != null ? rbObject : gameObject.GetComponent<Rigidbody2D>();
         if(virtualCamera == null){virtualCamera = FindObjectOfType<CinemachineVirtualCamera>();}
-
-        health = healthStart;
     }
 
     void FixedUpdate(){
         mousePosition = Camera.main.ScreenToWorldPoint(Input.mousePosition);
         if(fly){
-            Vector2 directionToMouse = mousePosition - (Vector2)transform.position;
+            Vector2 directionToMouse = mousePosition - (Vector2)GetPosition();
             Vector2 directionToMouseNormalizedOpposite = directionToMouse.normalized*-1;
 
             float distance = directionToMouse.magnitude;
@@ -50,7 +53,7 @@ public class Player : MonoBehaviour{
 
             targetVelocity = directionToMouseNormalizedOpposite * distanceClamped * velocityMagnitude;
 
-            rb.velocity += targetVelocity * Time.fixedDeltaTime;
+            AddForce(targetVelocity * Time.fixedDeltaTime);
             // Debug.Log("Velocity: "+rb.velocity+" | Mag: "+rb.velocity.magnitude);
             switch(velocityLimitType){
                 case VelocityLimitType.maxDist:
@@ -66,7 +69,7 @@ public class Player : MonoBehaviour{
             // Debug.Log("Clamped: "+rb.velocity+" | Mag: "+rb.velocity.magnitude);
         }
         if(flyUpwards){
-            rb.velocity += Vector2.up * velocityMagnitude * Time.fixedDeltaTime;
+            AddForce(Vector2.up * velocityMagnitude * Time.fixedDeltaTime);
             switch(velocityLimitType){
                 case VelocityLimitType.maxDist:
                     rb.velocity = Vector3.ClampMagnitude(rb.velocity, minMaxDistance.y);
@@ -100,7 +103,7 @@ public class Player : MonoBehaviour{
         }
 
         if(velocityAddTimer>=0){
-            rb.velocity += targetVelocity * Time.fixedDeltaTime;
+            AddForce(targetVelocity * Time.fixedDeltaTime);
             // Debug.Log("Velocity: "+rb.velocity+" | Mag: "+rb.velocity.magnitude);
             switch(velocityLimitType){
                 case VelocityLimitType.maxDist:
@@ -117,12 +120,21 @@ public class Player : MonoBehaviour{
 
             velocityAddTimer-=Time.fixedDeltaTime;
         }
+
+
+        // foreach(Rigidbody2D _rb in GetComponentsInChildren<Rigidbody2D>()){
+        //     _rb.velocity = rb.velocity;
+        // }
+        // transform.position = rb.transform.localPosition;
+        // rb.transform.localPosition = Vector2.zero;
+        // transform.position = Vector2.MoveTowards(transform.position, rb.transform.localPosition, Time.fixedDeltaTime*100f);
+        // rb.transform.localPosition = Vector2.MoveTowards(rb.transform.localPosition, Vector2.zero, Time.fixedDeltaTime*100f);
     }
 
     
     void Update(){
-        if(Input.GetKeyDown(KeyCode.Mouse0) && health > 0){
-            Vector2 directionToMouse = mousePosition - (Vector2)transform.position;
+        if(Input.GetKeyDown(KeyCode.Mouse0) && doTapPush && !dead){
+            Vector2 directionToMouse = mousePosition - (Vector2)GetPosition();
             Vector2 directionToMouseNormalizedOpposite = directionToMouse.normalized*-1;
 
             float distance = directionToMouse.magnitude;
@@ -137,50 +149,104 @@ public class Player : MonoBehaviour{
             if(Input.GetKeyDown(KeyCode.Space)){
                 // fly=!fly;
                 flyUpwards=!flyUpwards;
-                if(health<=0){Respawn();}
+                if(dead){Respawn();}
                 return;
             }
-            if(Input.GetKeyDown(KeyCode.R)){
-                transform.position=Vector2.zero;
+            if(Input.GetKeyDown(KeyCode.F)){
+                SetPositionV2(Vector2.zero);
                 rb.velocity=Vector2.zero;
-                if(health<=0){Respawn();}
+                if(dead){Respawn();}
                 return;
             }
             if(Input.GetKeyDown(KeyCode.D)){Die();return;}
         #endif
 
-        int _currentScore=Mathf.RoundToInt(transform.position.y*10);
+        int _currentScore=Mathf.RoundToInt(GetPosition().y*10)-40;  // 40 is the amount you start at
         if(_currentScore>GameManager.INSTANCE.score){
+            // Debug.Log(_currentScore+" | "+GameManager.INSTANCE.score);
             GameManager.INSTANCE.score=_currentScore;
         }
-    }
-    void OnCollisionEnter2D(Collision2D other){
-        // Debug.Log("Collision: "+other.relativeVelocity);
-        Debug.Log(System.Math.Round(other.relativeVelocity.magnitude,2)+" / "+collisionThreshold);
-        if(other.relativeVelocity.magnitude > collisionThreshold){
-            Die();
-            AudioManager.INSTANCE.Play("meatyPunch");
+
+        if(collisionSoundCooldownTimer>0){
+            collisionSoundCooldownTimer-=Time.deltaTime;
+        }
+
+        if(hitBodypartsList.Count>=transform.childCount){
+            if(!easterEggTriggered){
+                Debug.LogWarning("EASTER EGG");
+                AudioManager.INSTANCE.Play("tomAndJerryGoofyAhhScream");
+                easterEggTriggered=true;
+                Time.timeScale=0.1f;
+                easterEggTimer = 12f;
+            }
+        }
+        if(easterEggTimer>0){
+            easterEggTimer-=Time.fixedDeltaTime;
         }else{
-            if(other.relativeVelocity.magnitude > 0.1f){
-                AudioManager.INSTANCE.Play("punch");
+            if(easterEggTimer>-1){
+                Time.timeScale=1f;
+                easterEggTimer=-1f;
             }
         }
     }
+
+    void AddForce(Vector2 force){
+        rb.AddForce(force);
+        // foreach(Rigidbody2D _rb in GetComponentsInChildren<Rigidbody2D>()){_rb.AddForce(force);}
+    }
+    // void OnCollisionEnter2D(Collision2D other){
+    //     // Debug.Log("Collision: "+other.relativeVelocity);
+    //     Debug.Log(System.Math.Round(other.relativeVelocity.magnitude,2)+" / "+collisionThreshold);
+    //     if(other.relativeVelocity.magnitude > collisionThreshold){
+    //         Die();
+    //         AudioManager.INSTANCE.Play("meatyPunch");
+    //     }else{
+    //         if(other.relativeVelocity.magnitude > 0.1f){
+    //             AudioManager.INSTANCE.Play("punch");
+    //         }
+    //     }
+    // }
+    public void DeathCollision(){
+        if(collisionSoundCooldownTimer<=0){
+            collisionSoundCooldownTimer = collisionSoundCooldown;
+            AudioManager.INSTANCE.Play("meatyPunch");
+            Die();
+        }
+    }
     public void Die(){
-        health = 0;
-        fly = false;
-        flyUpwards = false;
-        GetComponent<SpriteRenderer>().color = Color.red;
-        rb.constraints = RigidbodyConstraints2D.None;
-        rb.mass = 1;
-        Debug.Log("You died.");
+        if(!dead){
+            dead = true;
+            fly = false;
+            flyUpwards = false;
+            // GetComponent<SpriteRenderer>().color = Color.red;
+            // foreach(SpriteRenderer spr in GetComponentsInChildren<SpriteRenderer>()){spr.color = Color.red;}
+            // rb.constraints = RigidbodyConstraints2D.None;
+            foreach(Balance b in GetComponentsInChildren<Balance>()){b.enabled=false;}
+            rb.mass = 1;
+            Debug.LogWarning("You died.");
+            GameManager.INSTANCE.SaveHighscore();
+        }
     }
     public void Respawn(){
-        health = healthStart;
-        GetComponent<SpriteRenderer>().color = Color.white;
+        dead = false;
+        // GetComponent<SpriteRenderer>().color = Color.white;
+        foreach(SpriteRenderer spr in GetComponentsInChildren<SpriteRenderer>()){spr.color = Color.white;}
         transform.localEulerAngles = Vector2.zero;
-        rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+        // rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+        foreach(Balance b in GetComponentsInChildren<Balance>()){b.enabled=true;}
         rb.mass = 0.5f;
+    }
+    public void AddBodypartToHitList(GameObject go){if(!hitBodypartsList.Contains(go))hitBodypartsList.Add(go);}
+
+    public Vector3 GetPosition(){
+        // return rb.transform.position;
+        return rb.transform.localPosition;
+    }
+    public void SetPosition(Vector3 pos){
+        rb.transform.localPosition = pos;
+    }
+    public void SetPositionV2(Vector2 pos){
+        rb.transform.localPosition = pos;
     }
 }
 

@@ -26,8 +26,15 @@ public class GameManager : MonoBehaviour{
             GlobalTimeIsPaused=false;
             GlobalTimeIsPausedNotSlowed=false;
         }
-        if(GSceneManager.CheckScene("Game")&&Player.INSTANCE!=null&&Player.INSTANCE.health>0&&!GlobalTimeIsPaused){
+        if(GSceneManager.CheckScene("Game")&&Player.INSTANCE!=null&&!Player.INSTANCE.dead&&!GlobalTimeIsPaused){
             currentPlaytime+=Time.unscaledDeltaTime;
+        }
+        if(GSceneManager.CheckScene("Game")){
+            if(Player.INSTANCE.dead){
+                if(Input.GetKeyDown(KeyCode.R) || Input.GetKeyDown(KeyCode.Space)){
+                    GSceneManager.INSTANCE.RestartGame();
+                }
+            }
         }
     }
     public void ResetMusicPitch(){
@@ -37,7 +44,7 @@ public class GameManager : MonoBehaviour{
         //if(CheckGamemodeSelected("Adventure")&&Player.instance!=null){SaveAdventure();}
         if(score>SaveSerial.INSTANCE.playerData.highscore.score){
             SaveSerial.INSTANCE.playerData.highscore=new Highscore(){
-                score=score,
+                score=this.score,
                 playtime=Mathf.RoundToInt(currentPlaytime),
                 version=gameVersion,
                 build=(float)System.Math.Round(buildVersion,2),
@@ -45,6 +52,7 @@ public class GameManager : MonoBehaviour{
             };
             Debug.Log("Highscore set for: "+score);
         }
+        SaveSerial.INSTANCE.Save();
     }
     public void ResetScore(){
         score=0;

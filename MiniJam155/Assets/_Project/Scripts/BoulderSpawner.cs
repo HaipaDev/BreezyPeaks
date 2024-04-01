@@ -31,7 +31,7 @@ public class BoulderSpawner : MonoBehaviour{
     public void SpawnBoulder(){
         float xx = Random.Range(spawnRange.x, spawnRange.y);
         float yy = Random.Range(spawnYAbovePlayer.x, spawnYAbovePlayer.y);
-        Vector2 spawnPos = new Vector2(xx,Player.INSTANCE.transform.position.y+yy);
+        Vector2 spawnPos = new Vector2(xx,Player.INSTANCE.GetPosition().y+yy);
         GameObject obj = Instantiate(prefabs[Random.Range(0, prefabs.Count)],spawnPos,Quaternion.identity);
         // Debug.Log("Spawned at: "+spawnPos);
 
