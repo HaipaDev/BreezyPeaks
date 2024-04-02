@@ -9,10 +9,10 @@ using Sirenix.OdinInspector;
 public class SaveSerial : MonoBehaviour{
 	public static SaveSerial INSTANCE;
 	void Awake(){if(INSTANCE!=null){Destroy(gameObject);}else{INSTANCE=this;DontDestroyOnLoad(gameObject);gameObject.name=gameObject.name.Split('(')[0];}}
-	IEnumerator Start(){
-		yield return new WaitForSecondsRealtime(0.02f);
-		RecreatePlayerData();
-	}
+	// IEnumerator Start(){
+	// 	yield return new WaitForSecondsRealtime(0.02f);
+	// 	RecreatePlayerData();
+	// }
 	// [SerializeField] string filenameLogin = "hyperGamerLogin";
 	[SerializeField] string filename = "playerData";
 	[SerializeField] string filenameSettings = "gameSettings";
@@ -124,6 +124,7 @@ public class SaveSerial : MonoBehaviour{
 		public float soundVolume=0.95f;
 		public float musicVolume=0.66f;
 
+		public bool pauseWhenOOF=true;
 		public bool particles=true;
 	}
 	

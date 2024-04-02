@@ -40,6 +40,6 @@ public class BoulderSpawner : MonoBehaviour{
         float randomScale = Random.Range(randomScaleRange.x, randomScaleRange.y);
         obj.transform.localScale = new Vector2(randomScale, randomScale);
 
-        WarningObject.INSTANCE.SetWarning(spawnPos);
+        if(obj!=null){WarningCreator.INSTANCE.SetWarning(obj.transform);}
     }
 }

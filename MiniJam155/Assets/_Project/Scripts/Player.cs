@@ -25,7 +25,9 @@ public class Player : MonoBehaviour{
     [SerializeField] float zoomoutCameraBase = 7f;
     [SerializeField] float velocityAddTime;
     [DisableInEditorMode][SerializeField] float velocityAddTimer;
+    [SerializeField]List<GameObject> legsObjectsList;
     [DisableInEditorMode][SerializeField] public bool dead;
+    [DisableInEditorMode][SerializeField] public bool canSetScore = true;
     [SerializeField] float collisionSoundCooldown = 0.1f;
     [DisableInEditorMode][SerializeField] float collisionSoundCooldownTimer;
     CinemachineVirtualCamera  virtualCamera;
@@ -39,6 +41,7 @@ public class Player : MonoBehaviour{
     void Start(){
         rb = rbObject != null ? rbObject : gameObject.GetComponent<Rigidbody2D>();
         if(virtualCamera == null){virtualCamera = FindObjectOfType<CinemachineVirtualCamera>();}
+        canSetScore = true;
     }
 
     void FixedUpdate(){
@@ -158,13 +161,22 @@ public class Player : MonoBehaviour{
                 if(dead){Respawn();}
                 return;
             }
+            if(Input.GetKeyDown(KeyCode.V)){if(dead){Respawn();}}
             if(Input.GetKeyDown(KeyCode.D)){Die();return;}
         #endif
 
         int _currentScore=Mathf.RoundToInt(GetPosition().y*10)-40;  // 40 is the amount you start at
-        if(_currentScore>GameManager.INSTANCE.score){
+        if(_currentScore>GameManager.INSTANCE.score && canSetScore){
             // Debug.Log(_currentScore+" | "+GameManager.INSTANCE.score);
             GameManager.INSTANCE.score=_currentScore;
+        }
+
+        if(!dead){
+            if(GetPosition().y<6){ // Balance leg on the ground, not in air
+                foreach(GameObject leg in legsObjectsList){leg.GetComponent<Balance>().force=80f;}
+            }else{
+                foreach(GameObject leg in legsObjectsList){leg.GetComponent<Balance>().force=2f;}
+            }
         }
 
         if(collisionSoundCooldownTimer>0){
@@ -232,12 +244,15 @@ public class Player : MonoBehaviour{
         // GetComponent<SpriteRenderer>().color = Color.white;
         foreach(SpriteRenderer spr in GetComponentsInChildren<SpriteRenderer>()){spr.color = Color.white;}
         transform.localEulerAngles = Vector2.zero;
-        // rb.constraints = RigidbodyConstraints2D.FreezeRotation;
+        hitBodypartsList=new List<GameObject>();
         foreach(Balance b in GetComponentsInChildren<Balance>()){b.enabled=true;}
         rb.mass = 0.5f;
     }
     public void AddBodypartToHitList(GameObject go){if(!hitBodypartsList.Contains(go))hitBodypartsList.Add(go);}
 
+    public Vector2 GetVelocity(){
+        return rb.velocity;
+    }
     public Vector3 GetPosition(){
         // return rb.transform.position;
         return rb.transform.localPosition;

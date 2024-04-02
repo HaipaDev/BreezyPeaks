@@ -52,7 +52,7 @@ MonoBehaviour:
     volume: 0.75
     volumeVariance: 0.1
     pitch: 1
-    pitchVariance: 0.1
+    pitchVariance: 0.2
     loop: 0
     mixerGroup: {fileID: 0}
     source: {fileID: 0}
@@ -61,7 +61,7 @@ MonoBehaviour:
     volume: 0.75
     volumeVariance: 0.1
     pitch: 1
-    pitchVariance: 0.1
+    pitchVariance: 0.5
     loop: 0
     mixerGroup: {fileID: 0}
     source: {fileID: 0}
@@ -97,7 +97,7 @@ MonoBehaviour:
     volume: 0.75
     volumeVariance: 0.1
     pitch: 1
-    pitchVariance: 0.1
+    pitchVariance: 0.5
     loop: 0
     mixerGroup: {fileID: 0}
     source: {fileID: 0}
@@ -106,7 +106,7 @@ MonoBehaviour:
     volume: 0.75
     volumeVariance: 0.1
     pitch: 1
-    pitchVariance: 0.1
+    pitchVariance: 0.3
     loop: 0
     mixerGroup: {fileID: 0}
     source: {fileID: 0}

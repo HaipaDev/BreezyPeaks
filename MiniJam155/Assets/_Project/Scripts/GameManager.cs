@@ -17,7 +17,10 @@ public class GameManager : MonoBehaviour{
     void Awake(){
         if(GameManager.INSTANCE!=null){Destroy(gameObject);}else{INSTANCE=this;DontDestroyOnLoad(gameObject);gameObject.name=gameObject.name.Split('(')[0];}
     }
-    void Start(){}
+    void Start(){
+        Jukebox.INSTANCE.PlayMusic("breezy");
+        SaveSerial.INSTANCE.Load();
+    }
     void Update(){
         if(Time.timeScale<=0.0001f){
             GlobalTimeIsPaused=true;
@@ -32,6 +35,9 @@ public class GameManager : MonoBehaviour{
         if(GSceneManager.CheckScene("Game")){
             if(Player.INSTANCE.dead){
                 if(Input.GetKeyDown(KeyCode.R) || Input.GetKeyDown(KeyCode.Space)){
+                    Player.INSTANCE.canSetScore = false;
+                    // SaveHighscore();
+                    // ResetScore();
                     GSceneManager.INSTANCE.RestartGame();
                 }
             }

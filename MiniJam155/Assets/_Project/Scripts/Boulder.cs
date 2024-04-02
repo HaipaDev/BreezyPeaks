@@ -6,6 +6,7 @@ public class Boulder : MonoBehaviour{
     [SerializeField] int collisionCounter;
     void Update(){
         if(transform.position.y < Player.INSTANCE.GetPosition().y - 50f){
+            // Debug.Log(transform.position.y+" | "+(Player.INSTANCE.GetPosition().y - 50f));
             Destroy(gameObject);
         }
     }

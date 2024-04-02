@@ -57,7 +57,7 @@ MonoBehaviour:
   settingsData:
     masterVolume: 0.95
     masterOOFVolume: 0.25
-    soundVolume: 0.95
-    ambienceVolume: -0.55
-    musicVolume: 0.66
+    soundVolume: 0.8
+    musicVolume: 0.95
+    pauseWhenOOF: 1
     particles: 1
