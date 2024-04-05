@@ -47,13 +47,13 @@ MonoBehaviour:
   audioMixer: {fileID: 24100000, guid: e23f31bd5262a9c48a4dffccfc461d2f, type: 2}
   mixerGroup: {fileID: -4171872816261821460, guid: e23f31bd5262a9c48a4dffccfc461d2f, type: 2}
   musics:
-  - name: mainMenu
-    clip: {fileID: 0}
+  - name: breezy
+    clip: {fileID: 8300000, guid: 06fee22bec7df5e488433bd75eed0bd4, type: 3}
     volume: 0.75
     pitch: 1
     source: {fileID: 0}
-  - name: breezy
-    clip: {fileID: 8300000, guid: 06fee22bec7df5e488433bd75eed0bd4, type: 3}
+  - name: mainMenu
+    clip: {fileID: 0}
     volume: 0.75
     pitch: 1
     source: {fileID: 0}

@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Sirenix.OdinInspector;
 
 public class GameManager : MonoBehaviour{
     public static GameManager INSTANCE;
@@ -11,8 +12,8 @@ public class GameManager : MonoBehaviour{
     public string gameVersion = "1.0";
 	public float buildVersion = 1;
 
-    public int score = 0;
-    public float currentPlaytime=0;
+    [DisableInEditorMode]public int score = 0;
+    [DisableInEditorMode]public float currentPlaytime=0;
 
     void Awake(){
         if(GameManager.INSTANCE!=null){Destroy(gameObject);}else{INSTANCE=this;DontDestroyOnLoad(gameObject);gameObject.name=gameObject.name.Split('(')[0];}

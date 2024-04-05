@@ -11,14 +11,49 @@ public class AssetsManager : MonoBehaviour{
 	[AssetsOnly,Searchable]public List<GObject> vfx;
 	[AssetsOnly,Searchable]public List<GSprite> sprites;
 	[AssetsOnly,Searchable]public List<GMaterial> materials;
+	[Header("Other")]
+	Vector2 windowEdgePointsX;
+	Vector2 windowEdgePointsY;
     
     void Awake(){if(INSTANCE!=null){Destroy(gameObject);}else{DontDestroyOnLoad(gameObject);INSTANCE=this;gameObject.name=gameObject.name.Split('(')[0];}}
-	// void Start(){
-	// 	var waveConfigsArr=Resources.LoadAll("ScriptableObjects/WaveConfigs", typeof(WaveConfig));
-	// 	foreach(UnityEngine.Object o in waveConfigsArr){waveConfigs.Add((WaveConfig)o);}
-	// 	var powerupItemsArr=Resources.LoadAll("ScriptableObjects/PowerupItems", typeof(PowerupItem));
-	// 	foreach(UnityEngine.Object o in powerupItemsArr){powerupItems.Add((PowerupItem)o);}
+	void Start(){
+		SetWindowEdgePoints();
+	}
+
+	public void SetWindowEdgePoints(){
+		windowEdgePointsX = new Vector2(
+			Camera.main.ViewportToWorldPoint(new Vector3(0,0,0)).x,
+			Camera.main.ViewportToWorldPoint(new Vector3(1,1,1)).x
+		);
+		windowEdgePointsY = new Vector2(
+			Camera.main.ViewportToWorldPoint(new Vector3(0,0,0)).y,
+			Camera.main.ViewportToWorldPoint(new Vector3(1,1,1)).y
+		);
+	}
+	// public Vector2 ClampToWindow(Vector2 vec){
+	// 	return new Vector2(
+	// 		Mathf.Clamp(vec.x,windowEdgePointsX.x,windowEdgePointsX.y),
+	// 		Mathf.Clamp(vec.y,windowEdgePointsY.x,windowEdgePointsY.y)
+	// 	);
 	// }
+	public Vector2 ClampToWindow(Vector2 position)
+    {
+        Vector2 clampedPosition = position;
+
+        float orthoSize = Camera.main.orthographicSize;
+        float aspectRatio = Screen.width / Screen.height;
+
+        // Calculate the horizontal and vertical boundaries of the game window
+        float xMin = Camera.main.transform.position.x - orthoSize * aspectRatio;
+        float xMax = Camera.main.transform.position.x + orthoSize * aspectRatio;
+        float yMin = Camera.main.transform.position.y - orthoSize;
+        float yMax = Camera.main.transform.position.y + orthoSize;
+
+        return new Vector2(
+			Mathf.Clamp(clampedPosition.x, xMin, xMax),
+        	Mathf.Clamp(clampedPosition.y, yMin, yMax)
+		);
+    }
 
 #region//Main
     public GameObject Make(string str, Vector2 pos){

@@ -26,6 +26,7 @@ public class ValueDisplay : MonoBehaviour{
     #region//GameManager
         if(GameManager.INSTANCE!=null){     var gs=GameManager.INSTANCE;
             if(value=="score") _txt=("Score: "+gs.score.ToString());
+            if(value=="gameVersion") _txt=("V "+gs.gameVersion.ToString());
         }
     #endregion
     #region//SaveSerial

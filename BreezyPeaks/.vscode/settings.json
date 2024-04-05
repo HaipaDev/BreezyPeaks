@@ -52,5 +52,5 @@
         "Temp/": true
     },
     "dotnet.preferCSharpExtension": true,
-    "dotnet.defaultSolution": "MiniJam155.sln"
+    "dotnet.defaultSolution": "BreezyPeaks.sln"
 }

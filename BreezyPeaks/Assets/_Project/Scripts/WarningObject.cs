@@ -32,4 +32,8 @@ public class WarningObject : MonoBehaviour{
         rt = GetComponent<RectTransform>();
         rt.localPosition = new Vector2(rt.localPosition.x, y);
     }
+    public void SetScale(float scale){
+        rt = GetComponent<RectTransform>();
+        rt.localScale = new Vector2(scale, scale);
+    }
 }

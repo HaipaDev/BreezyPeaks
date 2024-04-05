@@ -5,7 +5,10 @@ using UnityEngine.UI;
 using Sirenix.OdinInspector;
 
 public class BoulderSpawner : MonoBehaviour{
+    public static BoulderSpawner INSTANCE;
     [SerializeField] List<GameObject> prefabs;
+    [SerializeField] float startSpawningAboveY = 50; // *10 = score
+    [SerializeField] bool startSpawningAboveYOneTimeToggle = true; // Toggle after reaching forever on or only spawn if youre above
     [SerializeField] Vector2 spawnRange = new Vector2(-10f,10f);
     [SerializeField] Vector2 spawnYAbovePlayer = new Vector2(45f,55f);
     // [SerializeField] float spawnTimeRange = new Vector2(3f,6f);
@@ -13,18 +16,26 @@ public class BoulderSpawner : MonoBehaviour{
     [DisableInEditorMode][SerializeField] float spawnTimer;
     [SerializeField] Vector2 randomXVelRange = new Vector2(-1f,1f);
     [SerializeField] Vector2 randomScaleRange = new Vector2(0.2f,1.1f);
+    [DisableInEditorMode][SerializeField] bool didStartSpawningAboveYOneTimeToggle = false;
+    [DisableInEditorMode][SerializeField] bool canSpawn = false;
+    void Awake(){INSTANCE=this;}
     void Start(){
         spawnTimer = spawnTimeRange[spawnTimeRange.Length-1];
     }
 
     void Update(){
-        if(spawnTimer<=0){
-            SpawnBoulder();
-            // spawnTimer=spawnTime;
-            // spawnTimer=Random.Range(spawnTimeRange.x, spawnTimeRange.y);
-            spawnTimer=spawnTimeRange[Random.Range(0,spawnTimeRange.Length-1)];
-        }else{
-            spawnTimer-=Time.deltaTime;
+        if(didStartSpawningAboveYOneTimeToggle == false && (Player.INSTANCE.GetPosition().y > startSpawningAboveY)){didStartSpawningAboveYOneTimeToggle = true;}
+        canSpawn = (Player.INSTANCE.GetPosition().y > startSpawningAboveY) || (startSpawningAboveYOneTimeToggle && didStartSpawningAboveYOneTimeToggle);
+
+        if(canSpawn){
+            if(spawnTimer<=0){
+                SpawnBoulder();
+                // spawnTimer=spawnTime;
+                // spawnTimer=Random.Range(spawnTimeRange.x, spawnTimeRange.y);
+                spawnTimer=spawnTimeRange[Random.Range(0,spawnTimeRange.Length-1)];
+            }else{
+                spawnTimer-=Time.deltaTime;
+            }
         }
     }
     [Button("SpawnBoulder")]
@@ -42,4 +53,6 @@ public class BoulderSpawner : MonoBehaviour{
 
         if(obj!=null){WarningCreator.INSTANCE.SetWarning(obj.transform);}
     }
+
+    public Vector2 GetRandomScaleRange(){return randomScaleRange;}
 }

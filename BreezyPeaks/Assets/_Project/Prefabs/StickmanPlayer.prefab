@@ -1188,14 +1188,15 @@ MonoBehaviour:
   worldLayer:
     serializedVersion: 2
     m_Bits: 64
-  collisionThreshold: 25
+  collisionThreshold: 32
   velocityMagnitude: 800
-  minMaxDistance: {x: 1.4, y: 6}
+  minMaxDistance: {x: 1, y: 4}
   velocityLimitType: 2
   maxVelocity: 5
   fly: 0
   flyUpwards: 0
-  doTapPush: 1
+  doTapPush: 0
+  doHoldPush: 1
   offsetCamera: 1
   offsetCameraAmnt: 0.3
   zoomoutCamera: 1
@@ -1209,8 +1210,13 @@ MonoBehaviour:
   - {fileID: 7241946082670239683}
   - {fileID: 9100467032486578961}
   dead: 0
+  canSetScore: 1
   collisionSoundCooldown: 0.15
   collisionSoundCooldownTimer: 0
+  mousePosition: {x: 0, y: 0}
+  targetVelocity: {x: 0, y: 0}
+  currentBodyVelocityMagnitude: 0
+  currentTotalVelocityMagnitude: 0
   hitBodypartsList: []
   easterEggTriggered: 0
   easterEggTimer: 0

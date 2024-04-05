@@ -2958,10 +2958,6 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.y
       value: -34
       objectReference: {fileID: 0}
-    - target: {fileID: 5341275538602484634, guid: d5b9e598b2ddb59418e2c22d0f983c93, type: 3}
-      propertyPath: m_MatchWidthOrHeight
-      value: 0.5
-      objectReference: {fileID: 0}
     - target: {fileID: 6316889368250521702, guid: d5b9e598b2ddb59418e2c22d0f983c93, type: 3}
       propertyPath: m_Name
       value: PauseCanvas
@@ -3055,10 +3051,10 @@ RectTransform:
   m_Father: {fileID: 1387968016}
   m_RootOrder: -1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchorMin: {x: 0, y: 0}
+  m_AnchorMax: {x: 1, y: 1}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &5288674925955241125
 GameObject:
@@ -3100,6 +3096,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   warningPrefab: {fileID: 839129473251064344, guid: 5f32228de2708ce4b96859cd055efbe6, type: 3}
   y: 465
+  minMaxScaleClamp: {x: 0, y: 1}
+  minMaxScaleClampToBoulderSpawnerSizes: 1
 --- !u!1001 &7618864567609737689
 PrefabInstance:
   m_ObjectHideFlags: 0

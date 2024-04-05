@@ -45,8 +45,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b8fb669c24af574683d9b9b8dbd0feb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameVersion: 1.0
-  buildVersion: 1
+  gameVersion: 1.0.1
+  buildVersion: 2
   score: 0
   currentPlaytime: 0
 --- !u!114 &8032623990078099406
