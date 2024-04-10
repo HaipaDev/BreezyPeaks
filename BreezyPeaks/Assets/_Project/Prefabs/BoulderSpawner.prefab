@@ -48,6 +48,9 @@ MonoBehaviour:
   - {fileID: 1772689073657793020, guid: 77e0ac6e41edeeb4f9e8ebbfbcccb824, type: 3}
   - {fileID: 3048914239342464172, guid: 72f4c169c611bd746bc77f219630b867, type: 3}
   - {fileID: 235031187709469083, guid: 4db7f15baf1584844be1710044337f4b, type: 3}
+  - {fileID: 235031187709469083, guid: c847c8f5b4caa1241a4b29b7900d7609, type: 3}
+  - {fileID: 235031187709469083, guid: 3ad6df1b3b1b31844925a35ec17839a2, type: 3}
+  - {fileID: 235031187709469083, guid: 1f8f48a77e4b50a44b8fe9e43d4acb05, type: 3}
   startSpawningAboveY: 50
   startSpawningAboveYOneTimeToggle: 1
   spawnRange: {x: -8, y: 8}

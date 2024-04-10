@@ -25,7 +25,20 @@ public class ValueDisplay : MonoBehaviour{
     void ChangeText(){      string _txt="";
     #region//GameManager
         if(GameManager.INSTANCE!=null){     var gs=GameManager.INSTANCE;
-            if(value=="score") _txt=("Score: "+gs.score.ToString());
+            if(value=="score"){
+                if(!Player.INSTANCE.dead){_txt=("Score: "+gs.heightScore.ToString());}
+                else{_txt=("Height: "+gs.heightScore.ToString());}
+            }
+            if(value=="scorePostMortem"){
+                if(Player.INSTANCE.dead){
+                    if(GameManager.INSTANCE.setNewHighscore){
+                        _txt=gs.lastHighscore>0 ? ("Previous: "+gs.lastHighscore.ToString()) : "";
+                    }else{
+                        _txt=("Score: "+gs.score.ToString());
+                    }
+                }
+                else{_txt="";}
+            }
             if(value=="gameVersion") _txt=("V "+gs.gameVersion.ToString());
         }
     #endregion
@@ -33,7 +46,9 @@ public class ValueDisplay : MonoBehaviour{
         if(SaveSerial.INSTANCE!=null){     var s=SaveSerial.INSTANCE;
         var pd=s.playerData;
             if(value=="highscore"){
-                if(pd.highscore.score>0){_txt=("Highscore: "+pd.highscore.score.ToString());}
+                if(pd.highscore.score>0){
+                    _txt=GameManager.INSTANCE.setNewHighscore ? ("New Highscore: "+pd.highscore.score.ToString()) : ("Highscore: "+pd.highscore.score.ToString());
+                }
                 else{_txt="";}
             }
         }

@@ -5,11 +5,9 @@ using UnityEngine;
 public class PlayerCollision : MonoBehaviour{
     [SerializeField] bool turnRedSelf=true;
     void OnCollisionEnter2D(Collision2D other){
-        // Debug.Log("Collision: "+other.relativeVelocity);
-        // Debug.Log(gameObject.name+" | "+System.Math.Round(other.relativeVelocity.magnitude,2)+" / "+Player.INSTANCE.collisionThreshold);
-        if(other.relativeVelocity.magnitude > Player.INSTANCE.collisionThreshold){
-            Debug.LogWarning(gameObject.name+" | "+System.Math.Round(other.relativeVelocity.magnitude,2)+" / "+Player.INSTANCE.collisionThreshold);
-            Player.INSTANCE.DeathCollision();
+        if(other.relativeVelocity.magnitude > Player.INSTANCE.deathCollisionThreshold){
+            if(Player.INSTANCE.GetDebugCollisions()){Debug.LogWarning(gameObject.name+" | "+System.Math.Round(other.relativeVelocity.magnitude,2)+" / "+Player.INSTANCE.deathCollisionThreshold);}
+            Player.INSTANCE.DeathCollision(other.relativeVelocity.magnitude);
             if(turnRedSelf){
                 if(GetComponent<SpriteRenderer>()!=null){
                     GetComponent<SpriteRenderer>().color=Color.red;
@@ -17,9 +15,9 @@ public class PlayerCollision : MonoBehaviour{
             }
             Player.INSTANCE.AddBodypartToHitList(gameObject);
         }else{
-            Debug.Log(gameObject.name+" | "+System.Math.Round(other.relativeVelocity.magnitude,2)+" / "+Player.INSTANCE.collisionThreshold);
-            if(other.relativeVelocity.magnitude > 0.1f){
-                AudioManager.INSTANCE.Play("punch");
+            if(Player.INSTANCE.GetDebugCollisions()){Debug.Log(gameObject.name+" | "+System.Math.Round(other.relativeVelocity.magnitude,2)+" / "+Player.INSTANCE.deathCollisionThreshold);}
+            if(other.relativeVelocity.magnitude > Player.INSTANCE.GetCollisionSoundThreshold()){
+                Player.INSTANCE.RegularCollisionSound(other.relativeVelocity.magnitude);
             }
         }
     }

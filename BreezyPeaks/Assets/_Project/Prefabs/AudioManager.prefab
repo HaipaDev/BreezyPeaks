@@ -110,6 +110,42 @@ MonoBehaviour:
     loop: 0
     mixerGroup: {fileID: 0}
     source: {fileID: 0}
+  - name: rockHit2
+    clip: {fileID: 8300000, guid: 49457aff34f62e34694e77c881c720ec, type: 3}
+    volume: 0.75
+    volumeVariance: 0.1
+    pitch: 1
+    pitchVariance: 0.3
+    loop: 0
+    mixerGroup: {fileID: 0}
+    source: {fileID: 0}
+  - name: rockHit3
+    clip: {fileID: 8300000, guid: 6b7b7e8fe5cc64b44835b16845fb532c, type: 3}
+    volume: 0.75
+    volumeVariance: 0.1
+    pitch: 1
+    pitchVariance: 0.3
+    loop: 0
+    mixerGroup: {fileID: 0}
+    source: {fileID: 0}
+  - name: rockHit4
+    clip: {fileID: 8300000, guid: d665ceb6622cc704aadb45a0c67eaf0d, type: 3}
+    volume: 0.75
+    volumeVariance: 0.1
+    pitch: 1
+    pitchVariance: 0.3
+    loop: 0
+    mixerGroup: {fileID: 0}
+    source: {fileID: 0}
+  - name: rockHitHard
+    clip: {fileID: 8300000, guid: 55f50c689efadd24f84099153da4f0fa, type: 3}
+    volume: 0.75
+    volumeVariance: 0.1
+    pitch: 1
+    pitchVariance: 0.3
+    loop: 0
+    mixerGroup: {fileID: 0}
+    source: {fileID: 0}
   - name: rumble
     clip: {fileID: 8300000, guid: 119bab71bae8ca247a383c42a01b9588, type: 3}
     volume: 0.75

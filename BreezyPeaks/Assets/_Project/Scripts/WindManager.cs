@@ -17,8 +17,12 @@ public class WindManager : MonoBehaviour{
     }
 
     void Update(){
-        float playerVelocity = Player.INSTANCE.GetVelocity().magnitude;
-        volume = (playerVelocity - velocityRange.x) / (velocityRange.y - velocityRange.x);
+        if(!GameManager.GlobalTimeIsPaused){
+            float playerVelocity = Player.INSTANCE.GetVelocity().magnitude;
+            volume = (playerVelocity - velocityRange.x) / (velocityRange.y - velocityRange.x);
+        }else{
+            volume = Mathf.Lerp(volume, 0, 0.01f);
+        }
         actualVolume = Mathf.Clamp(volume*volumeMultiplierPre,0,maxVolume)*volumeMultiplierPost;
         // Debug.Log(playerVelocity+" | "+volume+" | "+actualVolume);
         audioSource.volume = actualVolume;

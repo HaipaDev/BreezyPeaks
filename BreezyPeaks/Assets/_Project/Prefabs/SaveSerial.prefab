@@ -61,3 +61,4 @@ MonoBehaviour:
     musicVolume: 0.95
     pauseWhenOOF: 1
     particles: 1
+    holdToFly: 1

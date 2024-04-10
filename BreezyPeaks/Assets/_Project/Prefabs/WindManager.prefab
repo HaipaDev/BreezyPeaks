@@ -45,10 +45,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f18bea4089aa55e4f906b5f2b7b8c200, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  velocityRange: {x: 10, y: 40}
+  velocityRange: {x: 15, y: 50}
   maxVolume: 0.8
-  volumeMultiplier: 0.9
+  volumeMultiplierPre: 1
+  volumeMultiplierPost: 1
   volume: 0
+  actualVolume: 0
 --- !u!82 &3327416356730253299
 AudioSource:
   m_ObjectHideFlags: 0
@@ -58,7 +60,7 @@ AudioSource:
   m_GameObject: {fileID: 6501484284450419914}
   m_Enabled: 1
   serializedVersion: 4
-  OutputAudioMixerGroup: {fileID: 3802854714199624914, guid: e23f31bd5262a9c48a4dffccfc461d2f, type: 2}
+  OutputAudioMixerGroup: {fileID: -975616928321721838, guid: e23f31bd5262a9c48a4dffccfc461d2f, type: 2}
   m_audioClip: {fileID: 8300000, guid: 263e86ee53f1d7e4181f7d1b524ef085, type: 3}
   m_PlayOnAwake: 1
   m_Volume: 0

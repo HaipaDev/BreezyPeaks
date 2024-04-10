@@ -53,6 +53,10 @@ public class BoulderSpawner : MonoBehaviour{
 
         if(obj!=null){WarningCreator.INSTANCE.SetWarning(obj.transform);}
     }
+    [Button("CleanAllBoulders")]
+    public void CleanAllBoulders(){
+        foreach(Boulder b in FindObjectsOfType<Boulder>()){Destroy(b.gameObject);}
+    }
 
     public Vector2 GetRandomScaleRange(){return randomScaleRange;}
 }

@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class WarningObject : MonoBehaviour{
     [SerializeField] Transform followTransform;
-    // [DisableInEditorMode][SerializeField] float timer;
     RectTransform rt;
     RectTransform canvasRect;
     void Awake(){
@@ -13,16 +12,17 @@ public class WarningObject : MonoBehaviour{
         canvasRect = transform.root.GetComponent<RectTransform>();
     }
     void Update(){
-        Vector3 screenPosition = Camera.main.WorldToScreenPoint(followTransform.position);
+        if(followTransform==null){Destroy(gameObject);}
+        else{
+            Vector3 screenPosition = Camera.main.WorldToScreenPoint(followTransform.position);
 
-        Vector2 canvasPosition;
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRect, screenPosition, null, out canvasPosition);
+            Vector2 canvasPosition;
+            RectTransformUtility.ScreenPointToLocalPointInRectangle(canvasRect, screenPosition, null, out canvasPosition);
 
-        rt.localPosition = new Vector2(canvasPosition.x, rt.localPosition.y);
+            rt.localPosition = new Vector2(canvasPosition.x, rt.localPosition.y);
 
-        if(followTransform.position.y < Player.INSTANCE.GetPosition().y+15f || followTransform==null){Destroy(gameObject);}
-        // if(timer>0){timer-=Time.deltaTime;}
-        // else{Destroy(gameObject);}
+            if(followTransform.position.y < Player.INSTANCE.GetPosition().y+15f || followTransform==null){Destroy(gameObject);}
+        }
         
     }
     public void SetFollowTransform(Transform t){

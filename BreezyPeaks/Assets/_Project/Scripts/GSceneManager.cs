@@ -44,7 +44,9 @@ public class GSceneManager : MonoBehaviour{ public static GSceneManager INSTANCE
     }
     public void RestartGame(){//GSceneManager.INSTANCE.StartCoroutine(GSceneManager.INSTANCE.RestartGameI());}
     // IEnumerator RestartGameI(){
-        GameManager.INSTANCE.SaveHighscore();
+        if(!Player.INSTANCE.dead){
+            GameManager.INSTANCE.SaveHighscore();
+        }
         //if(GameManager.INSTANCE.CheckGamemodeSelected("Adventure"))GameManager.INSTANCE.SaveAdventure();//not sure if Restart should save or not
         // yield return new WaitForSecondsRealtime(0.01f);
         //spawnReqsMono.RestartAllValues();

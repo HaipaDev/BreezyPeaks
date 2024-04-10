@@ -98,6 +98,10 @@ public class SaveSerial : MonoBehaviour{
 			//var hi=-1;foreach(int h in playerData.highscore){hi++;if(h!=0)playerData.highscore[hi]=h;}
 			Debug.Log("Game Data loaded");
 		}else Debug.LogWarning("Game Data file not found in: "+_playerDataPath());
+
+		if(PauseMenu.INSTANCE!=null){
+        	PauseMenu.INSTANCE.UpdateRestartHighscoreButtonVisibility();
+		}
 	}
 	public void Delete(){
 		playerData=new PlayerData();
@@ -121,11 +125,14 @@ public class SaveSerial : MonoBehaviour{
 	[System.Serializable]public class SettingsData{
 		public float masterVolume=0.95f;
 		public float masterOOFVolume=0.25f;
-		public float soundVolume=0.95f;
-		public float musicVolume=0.66f;
+		public float soundVolume=0.8f;
+		public float windVolume=1f;
+		public float musicVolume=0.9f;
 
 		public bool pauseWhenOOF=true;
 		public bool particles=true;
+
+		public bool holdToFly=true;
 	}
 	
 	public string _settingsDataPath(){return Application.persistentDataPath+"/"+filenameSettings+".json";}

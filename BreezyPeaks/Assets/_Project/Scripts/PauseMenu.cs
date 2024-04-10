@@ -1,21 +1,40 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 using UnityEngine.SceneManagement;
 using Sirenix.OdinInspector;
 
-public class PauseMenu : MonoBehaviour{     public static PauseMenu INSTANCE;
+public class PauseMenu : MonoBehaviour{
+    public static PauseMenu INSTANCE;
     public static bool GameIsPaused = false;
     [ChildGameObjectsOnly]public GameObject pauseMenuUI;
+    [ChildGameObjectsOnly]public GameObject restartHighscoreUI;
     // [ChildGameObjectsOnly]public GameObject optionsUI;
     [ChildGameObjectsOnly]public GameObject blurChild;
+    [ChildGameObjectsOnly]public Button restartHighscoreButton;
+    [ChildGameObjectsOnly]public Toggle holdToFlyToggle;
+    [ChildGameObjectsOnly]public Toggle particlesToggle;
+    [ChildGameObjectsOnly]public Slider soundVolumeSlider;
+    [ChildGameObjectsOnly]public Slider windVolumeSlider;
+    [ChildGameObjectsOnly]public Slider musicVolumeSlider;
     float unpausedTimer;
     float unpausedTimeReq=0.3f;
-    //Shop shop;
+    bool awaitingResetHighscoreConfirm;
+
     void Start(){
         INSTANCE=this;
         Resume();
         unpausedTimeReq=0;
+
+        UpdateRestartHighscoreButtonVisibility();
+        holdToFlyToggle.isOn=SaveSerial.INSTANCE.settingsData.holdToFly;
+        UpdateToggleHoldToFly();
+        UpdateToggleParticles();
+        soundVolumeSlider.value=SaveSerial.INSTANCE.settingsData.soundVolume;
+        windVolumeSlider.value=SaveSerial.INSTANCE.settingsData.windVolume;
+        musicVolumeSlider.value=SaveSerial.INSTANCE.settingsData.musicVolume;
     }
     void Update(){
         var _isEditor=false;
@@ -29,6 +48,7 @@ public class PauseMenu : MonoBehaviour{     public static PauseMenu INSTANCE;
             if(GameIsPaused){
                 if(Application.isFocused){
                     if(pauseMenuUI.activeSelf){Resume();return;}
+                    else if(awaitingResetHighscoreConfirm){ResetHighscoreConfirmClose();return;}
                     // if(optionsUI.transform.GetChild(0).gameObject.activeSelf){SaveSerial.INSTANCE.SaveSettings();pauseMenuUI.SetActive(true);return;}
                     // if(optionsUI.transform.GetChild(1).gameObject.activeSelf){optionsUI.GetComponent<SettingsMenu>().OpenSettings();PauseEmpty();return;}
                 }
@@ -40,15 +60,20 @@ public class PauseMenu : MonoBehaviour{     public static PauseMenu INSTANCE;
             if(unpausedTimer==-1)unpausedTimer=0;
             unpausedTimer+=Time.unscaledDeltaTime;
         }else{
-            if(Input.GetKeyDown(KeyCode.R)){Restart();}
+            if(pauseMenuUI.activeSelf){
+                if(Input.GetKeyDown(KeyCode.R)){Restart();}
+            }
         }
     }
     public void Resume(){
-        pauseMenuUI.SetActive(false);
         blurChild.SetActive(false);
+        pauseMenuUI.SetActive(false);
+        restartHighscoreUI.SetActive(false);
         // if(optionsUI.transform.childCount>0)if(optionsUI.transform.GetChild(0).gameObject.activeSelf){if(SettingsMenu.INSTANCE!=null)SettingsMenu.INSTANCE.Back();}
         Time.timeScale=1;
         GameIsPaused=false;
+        
+        SaveSerial.INSTANCE.SaveSettings();
     }
     public void Restart(){
         GSceneManager.INSTANCE.RestartGame();
@@ -62,6 +87,7 @@ public class PauseMenu : MonoBehaviour{     public static PauseMenu INSTANCE;
     public void Pause(){
         pauseMenuUI.SetActive(true);
         blurChild.SetActive(true);
+        restartHighscoreUI.SetActive(false);
         PauseEmpty();
     }
     
@@ -85,5 +111,57 @@ public class PauseMenu : MonoBehaviour{     public static PauseMenu INSTANCE;
         ((unpausedTimer>=unpausedTimeReq||unpausedTimer==-1))&&
         ((Application.isFocused)||(!Application.isFocused&&!_isEditor&&_pauseWhenOOF))
         );
+    }
+
+
+    
+    public void SetSoundVolume(float val){
+        SaveSerial.INSTANCE.settingsData.soundVolume=val;
+        // SaveSerial.INSTANCE.SaveSettings();
+    }
+    public void SetWindVolume(float val){
+        SaveSerial.INSTANCE.settingsData.windVolume=val;
+        // SaveSerial.INSTANCE.SaveSettings();
+    }
+    public void SetMusicVolume(float val){
+        SaveSerial.INSTANCE.settingsData.musicVolume=val;
+        // SaveSerial.INSTANCE.SaveSettings();
+    }
+    public void ResetHighscoreConfirmOpen(){
+        awaitingResetHighscoreConfirm = true;
+        pauseMenuUI.SetActive(false);
+        restartHighscoreUI.SetActive(true);
+    }
+    public void ResetHighscoreConfirmClose(){
+        awaitingResetHighscoreConfirm = false;
+        pauseMenuUI.SetActive(true);
+        restartHighscoreUI.SetActive(false);
+    }
+    public void ResetHighscore(){
+        ResetHighscoreConfirmClose();
+        GameManager.INSTANCE.ResetHighscore();
+    }
+    public void ToggleHoldToFly(bool isOn){
+        SaveSerial.INSTANCE.settingsData.holdToFly=isOn;
+        UpdateToggleHoldToFly();
+        // SaveSerial.INSTANCE.SaveSettings();
+    }
+    public void ToggleParticles(bool isOn){
+        SaveSerial.INSTANCE.settingsData.particles=isOn;
+        UpdateToggleParticles();
+        // SaveSerial.INSTANCE.SaveSettings();
+    }
+    void UpdateToggleHoldToFly(){
+        holdToFlyToggle.isOn = SaveSerial.INSTANCE.settingsData.holdToFly;
+        holdToFlyToggle.GetComponent<TextMeshProUGUI>().text = SaveSerial.INSTANCE.settingsData.holdToFly ? "Hold to\nFly On" : "Hold to\nFly Off";
+        holdToFlyToggle.GetComponent<TextMeshProUGUI>().color = SaveSerial.INSTANCE.settingsData.holdToFly ? new Color(0,128,0) : Color.white;
+    }
+    void UpdateToggleParticles(){
+        particlesToggle.isOn = SaveSerial.INSTANCE.settingsData.particles;
+        particlesToggle.GetComponent<TextMeshProUGUI>().text = SaveSerial.INSTANCE.settingsData.particles ? "Particles\nOn" : "Particles\nOff";
+        particlesToggle.GetComponent<TextMeshProUGUI>().color = SaveSerial.INSTANCE.settingsData.particles ? new Color(0,128,0) : Color.white;
+    }
+    public void UpdateRestartHighscoreButtonVisibility(){
+        restartHighscoreButton.gameObject.SetActive(SaveSerial.INSTANCE.playerData.highscore!=null && SaveSerial.INSTANCE.playerData.highscore.score>0 ? true : false);
     }
 }

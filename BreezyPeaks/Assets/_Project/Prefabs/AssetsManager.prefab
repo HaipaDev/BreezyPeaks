@@ -45,6 +45,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objects: []
-  vfx: []
+  vfx:
+  - name: windPush
+    gobj: {fileID: 6408326277069177372, guid: f9babb82701d82a499d7eefd5799b77b, type: 3}
   sprites: []
   materials: []

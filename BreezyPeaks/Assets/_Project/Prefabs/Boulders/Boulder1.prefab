@@ -325,3 +325,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ef4c433d39717c4f8753bc25f26f8fa, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  collisionSoundStartThreshold: 0.5
+  hardCollisionThreshold: 20
+  scaleDependentVolume: 1
+  scaleDependentPitch: 0
+  collisionCounter: 0
+  collidedWithFloor: 0

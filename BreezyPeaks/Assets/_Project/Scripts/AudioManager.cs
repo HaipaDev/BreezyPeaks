@@ -45,6 +45,8 @@ public class AudioManager : MonoBehaviour{
 			}
 			if(ss.soundVolume>0){audioMixer.SetFloat("SoundVolume", AssetsManager.InvertNormalizedMin(ss.soundVolume,-50));}
 			else{audioMixer.SetFloat("SoundVolume", -80);}
+			if(ss.windVolume>0){audioMixer.SetFloat("WindVolume", AssetsManager.InvertNormalizedMin(ss.windVolume,-50));}
+			else{audioMixer.SetFloat("WindVolume", -80);}
 			if(ss.musicVolume>0){audioMixer.SetFloat("MusicVolume", AssetsManager.InvertNormalizedMin(ss.musicVolume,-50));}
 			else{audioMixer.SetFloat("MusicVolume", -80);}
 		}
@@ -78,6 +80,23 @@ public class AudioManager : MonoBehaviour{
 
 		s.source.volume = s.volume * (1f + UnityEngine.Random.Range(-s.volumeVariance / 2f, s.volumeVariance / 2f));
 		s.source.pitch = s.pitch * (1f + UnityEngine.Random.Range(-s.pitchVariance / 2f, s.pitchVariance / 2f));
+		s.source.loop = s.loop;
+
+		s.source.Play();
+	}
+	public void PlayCustom(string sound, float volume=-1, float volumeVariance=-1, float pitch=-1, float pitchVariance=-1){
+		Sound s = Array.Find(sounds, item => item.name == sound);
+		if (s == null){
+			Debug.LogWarning("Sound: " + sound + " not found!");
+			return;
+		}
+		if(volume == -1){volume = s.volume;}
+		if(volumeVariance == -1){volumeVariance = s.volumeVariance;}
+		if(pitch == -1){pitch = s.pitch;}
+		if(pitchVariance == -1){pitchVariance = s.pitchVariance;}
+
+		s.source.volume = volume * (1f + UnityEngine.Random.Range(-volumeVariance / 2f, volumeVariance / 2f));
+		s.source.pitch = pitch * (1f + UnityEngine.Random.Range(-pitchVariance / 2f, pitchVariance / 2f));
 		s.source.loop = s.loop;
 
 		s.source.Play();
